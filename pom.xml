@@ -21,6 +21,11 @@
             <id>Maven JMeter Repo</id>
             <url>http://yciabaud.github.com/jmeter-maven-plugin/repository</url>
         </repository>
+        <!--  needed to retrieve bsh2.05 -->
+        <repository>
+            <id>JBoss Thirdparty Releases</id>
+            <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -62,6 +67,11 @@
         </dependency>
 		
 	<!-- JMeter dependencies -->
+		<dependency>
+ 		 <groupId>org.beanshell</groupId>
+  		 <artifactId>bsh</artifactId>
+  		 <version>2.0b5</version>
+		</dependency>
         <dependency>
             <groupId>org.apache.jmeter</groupId>
             <artifactId>ApacheJMeter_core</artifactId>
