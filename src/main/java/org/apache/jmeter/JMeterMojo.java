@@ -209,7 +209,7 @@ public class JMeterMojo extends AbstractMojo {
 
     private File workDir;
     private File jmeterLog;
-    private DateFormat fmt = new SimpleDateFormat("yyMMdd");
+    private DateFormat fmt = new SimpleDateFormat("yyMMdd_HHmmss");
     private static final String JMETER_ARTIFACT_GROUPID = "org.apache.jmeter";
     private static final String BEANSHELL_ARTIFACT_GROUPID = "org.beanshell";
 
@@ -430,6 +430,7 @@ public class JMeterMojo extends AbstractMojo {
             String resultFileName = reportDir.toString() + File.separator + test.getName().substring(0, test.getName().lastIndexOf(".")) + "-" + fmt.format(new Date()) + ".xml";
             //delete file if it already exists
             new File(resultFileName).delete();
+            
             List<String> argsTmp = Arrays.asList("-n", "-t",
                     test.getCanonicalPath(),
                     "-l", resultFileName,
