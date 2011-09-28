@@ -212,6 +212,7 @@ public class JMeterMojo extends AbstractMojo {
     private DateFormat fmt = new SimpleDateFormat("yyMMdd_HHmmss");
     private static final String JMETER_ARTIFACT_GROUPID = "org.apache.jmeter";
     private static final String BEANSHELL_ARTIFACT_GROUPID = "org.beanshell";
+    private static final String COMMONS_ARTIFACT_GROUPID = "commons.io";
 
     /**
      * Run all JMeter tests.
@@ -348,7 +349,7 @@ public class JMeterMojo extends AbstractMojo {
             for (Object oDep : mavenProject.getDependencyArtifacts()) {
                 if (oDep instanceof Dependency) {
                     Dependency dep = (Dependency) oDep;
-                    if (JMETER_ARTIFACT_GROUPID.equals(dep.getGroupId()) || BEANSHELL_ARTIFACT_GROUPID.equals(dep.getGroupId())) {
+                    if (JMETER_ARTIFACT_GROUPID.equals(dep.getGroupId()) || BEANSHELL_ARTIFACT_GROUPID.equals(dep.getGroupId()) || COMMONS_ARTIFACT_GROUPID.equals(dep.getGroupId())) {
                         //VersionRange needed for Maven 2.x compatibility.
                         VersionRange versionRange = VersionRange.createFromVersionSpec(dep.getVersion());
                         Artifact jmeterArtifact = new DefaultArtifact(JMETER_ARTIFACT_GROUPID, dep.getArtifactId(), versionRange, "", "jar", "", new DefaultArtifactHandler());
@@ -359,7 +360,7 @@ public class JMeterMojo extends AbstractMojo {
                 }
                 if (oDep instanceof Artifact) {
                     Artifact jmeterArtifact = (Artifact) oDep;
-                    if (JMETER_ARTIFACT_GROUPID.equals(jmeterArtifact.getGroupId()) || BEANSHELL_ARTIFACT_GROUPID.equals(jmeterArtifact.getGroupId())) {
+                    if (JMETER_ARTIFACT_GROUPID.equals(jmeterArtifact.getGroupId()) || BEANSHELL_ARTIFACT_GROUPID.equals(jmeterArtifact.getGroupId()) || COMMONS_ARTIFACT_GROUPID.equals(jmeterArtifact.getGroupId())) {
                         List remoteArtifactRepositories = mavenProject.getRemoteArtifactRepositories();
                         artifactResolver.resolve(jmeterArtifact, remoteArtifactRepositories, localRepository);
                         searchPath += jmeterArtifact.getFile().getAbsolutePath() + ";";
