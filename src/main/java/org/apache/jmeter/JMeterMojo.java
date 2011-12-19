@@ -47,6 +47,12 @@ import org.apache.tools.ant.DirectoryScanner;
  * @requiresProject true
  */
 public class JMeterMojo extends AbstractMojo {
+	
+	
+	/**
+	 * @parameter 
+	 */
+	private String userDir;
 
     /**
      * Path to a Jmeter test XML file.
@@ -207,7 +213,13 @@ public class JMeterMojo extends AbstractMojo {
      */
     private boolean jmeterPreserveIncludeOrder;
 
+    /**
+     * Temp dir for Jmeter
+     * @parameter
+     */
     private File workDir;
+    
+    
     private File jmeterLog;
     private DateFormat fmt = new SimpleDateFormat("yyMMdd_HHmmss");
     private static final String JMETER_ARTIFACT_GROUPID = "org.apache.jmeter";
@@ -218,6 +230,8 @@ public class JMeterMojo extends AbstractMojo {
      * Run all JMeter tests.
      */
     public void execute() throws MojoExecutionException, MojoFailureException {
+    	
+    	// Init System Properties
         initSystemProps();
 
         List<String> jmeterTestFiles = new ArrayList<String>();
@@ -320,7 +334,15 @@ public class JMeterMojo extends AbstractMojo {
      * @throws MojoExecutionException exception
      */
     private void initSystemProps() throws MojoExecutionException {
-        workDir = new File("target" + File.separator + "jmeter");
+    	
+    	if (workDir != null) {
+    		getLog().info("Print out workDir");
+        	getLog().info(this.workDir.getPath());
+        	
+    		
+    	} else { 
+    		workDir = new File("target" + File.separator + "jmeter");
+    	}
         workDir.mkdirs();
         createTemporaryProperties();
         resolveJmeterArtifact();
@@ -393,6 +415,7 @@ public class JMeterMojo extends AbstractMojo {
         List<File> temporaryPropertyFiles = new ArrayList<File>();
 
         String jmeterTargetDir = File.separator + "target" + File.separator + "jmeter" + File.separator;
+        
         File saveServiceProps = new File(workDir, "saveservice.properties");
         System.setProperty("saveservice_properties", jmeterTargetDir + saveServiceProps.getName());
         temporaryPropertyFiles.add(saveServiceProps);
@@ -432,11 +455,19 @@ public class JMeterMojo extends AbstractMojo {
             //delete file if it already exists
             new File(resultFileName).delete();
             
+            if (userDir == null) { 
+            	this.userDir = System.getProperty("user.dir");
+            }
+            
+            
+            
+            
             List<String> argsTmp = Arrays.asList("-n", "-t",
                     test.getCanonicalPath(),
                     "-l", resultFileName,
                     "-p", jmeterDefaultPropertiesFile.toString(),
-                    "-d", System.getProperty("user.dir"));
+                    "-d", this.userDir);
+                    //"-d", System.getProperty("user.dir"));
 
             List<String> args = new ArrayList<String>();
             args.addAll(argsTmp);
@@ -468,6 +499,7 @@ public class JMeterMojo extends AbstractMojo {
             if (getLog().isDebugEnabled()) {
                 getLog().debug("JMeter is called with the following command line arguments: " + args.toString());
             }
+            
 
             // This mess is necessary because JMeter likes to use System.exit.
             // We need to trap the exit call.
