@@ -48,6 +48,11 @@ import org.apache.tools.ant.DirectoryScanner;
  */
 public class JMeterMojo extends AbstractMojo {
 	
+	/**
+	 * @parameter default-value="false"
+	 */
+	private boolean dateFilename;
+
 	
 	/**
 	 * @parameter 
@@ -450,8 +455,15 @@ public class JMeterMojo extends AbstractMojo {
 
         try {
             getLog().info("Executing test: " + test.getCanonicalPath());
-
-            String resultFileName = reportDir.toString() + File.separator + test.getName().substring(0, test.getName().lastIndexOf(".")) + "-" + fmt.format(new Date()) + ".xml";
+            
+            String resultFileName = reportDir.toString() + File.separator + test.getName().substring(0, test.getName().lastIndexOf(".")) + ".xml";	
+            
+            if (dateFilename) {
+              resultFileName = reportDir.toString() + File.separator + test.getName().substring(0, test.getName().lastIndexOf(".")) + "-" + fmt.format(new Date()) + ".xml";	
+            }
+            
+            getLog().debug("Result Filename: " + resultFileName);
+            
             //delete file if it already exists
             new File(resultFileName).delete();
             
