@@ -478,7 +478,8 @@ public class JMeterMojo extends AbstractMojo {
                     test.getCanonicalPath(),
                     "-l", resultFileName,
                     "-p", jmeterDefaultPropertiesFile.toString(),
-                    "-d", this.userDir);
+                    "-d", this.userDir,
+                    "-N", "localhost");
                     //"-d", System.getProperty("user.dir"));
 
             List<String> args = new ArrayList<String>();
